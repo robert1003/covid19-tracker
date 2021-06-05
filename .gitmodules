@@ -6,4 +6,4 @@
 	url = git@github.com:robert1003/frontend-user.git
 [submodule "backend"]
 	path = backend
-	url = https://github.com/Rhodanthe1116/go-gin-dynamodb
+	url = git@github.com:Rhodanthe1116/go-gin-dynamodb.git
