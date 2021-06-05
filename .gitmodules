@@ -1,0 +1,9 @@
+[submodule "frontend-store"]
+	path = frontend-store
+	url = git@github.com:edisonhello/CNL-project-backend-store.git
+[submodule "frontend-user"]
+	path = frontend-user
+	url = git@github.com:robert1003/frontend-user.git
+[submodule "backend"]
+	path = backend
+	url = https://github.com/Rhodanthe1116/go-gin-dynamodb
