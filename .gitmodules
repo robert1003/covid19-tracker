@@ -7,3 +7,6 @@
 [submodule "backend"]
 	path = backend
 	url = git@github.com:Rhodanthe1116/go-gin-dynamodb.git
+[submodule "infra"]
+	path = infra
+	url = https://github.com/Rhodanthe1116/distributed-infra
