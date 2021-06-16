@@ -1,6 +1,6 @@
 from locust import HttpUser, TaskSet, task
-from random import randint
-import json
+from random import randint, seed
+import json, time
 
 
 class WebsiteTasks(TaskSet):
@@ -21,33 +21,47 @@ class WebsiteTasks(TaskSet):
         self.type, self.idx = len(self.idx_list) % 2, len(self.idx_list) // 2
         self.idx_list.append(0)
         if self.type == 0:   # user
-            self.user_phonenum.append(str(randint(0, 1000000000000000)))
-            self.user_password.append(str(randint(0, 1000000000000000)))
+            self.user_phonenum.append(0)
+            self.user_password.append(0)
             while 1:
                 try:
-                    ph, ps, val = self.user_phonenum[-1], self.user_password[-1], {}
+                    self.user_phonenum[self.idx] = str(randint(0, 1000000000000000))
+                    self.user_password[self.idx] = str(randint(0, 1000000000000000))
+                    ph, ps, val = self.user_phonenum[self.idx], self.user_password[self.idx], {}
                     val['phone'], val['password'] = ph, ps
-                    res = self.client.post('/auth/user/signup', data=json.dumps(val)).json()
-                    print('user sign up', res, flush=True)
-                    if 'error' not in res:
+                    res = self.client.post('/auth/user/signup', data=json.dumps(val))
+                    print(val)
+                    print('user sign up', res.status_code)
+                    if res.status_code == 200:
+                        res=res.json()
+                        print('user sign up', res, flush=True)
                         break
-                except:
-                    print('User Signup Error', flush=True)
+                    else:
+                        print(self.idx, res.text)
+                except Exception as e:
+                    print('User Signup Error', e, flush=True)
         else:
-            self.store_phonenum.append(str(randint(0, 1000000000000000)))
-            self.store_password.append(str(randint(0, 1000000000000000)))
+            self.store_phonenum.append(0)
+            self.store_password.append(0)
             self.store_store_id.append(0)
             while 1:
                 try:
-                    ph, ps, val = self.store_phonenum[-1], self.store_password[-1], {}
+                    self.store_phonenum[self.idx] = str(randint(0, 1000000000000000))
+                    self.store_password[self.idx] = str(randint(0, 1000000000000000))
+                    ph, ps, val = self.store_phonenum[self.idx], self.store_password[self.idx], {}
                     val['phone'], val['password'] = ph, ps
                     val['name'], val['address'] = 'giver', 'taiwan'
-                    res = self.client.post('/auth/store/signup', data=json.dumps(val)).json()
-                    print('Store Sign up', res, flush=True)
-                    if 'error' not in res:
+                    res = self.client.post('/auth/store/signup', data=json.dumps(val))
+                    print(val)
+                    print('store sign up', res.status_code)
+                    if res.status_code == 200:
+                        res=res.json()
+                        print('Store Sign up', res, flush=True)
                         break
-                except:
-                    print('Store Signup Error', flush=True)
+                    else:
+                        print(self.idx, res.text)
+                except Exception as e:
+                    print('Store Signup Error', e, flush=True)
 
     def _login(self):
         print('self.idx: ', self.type, self.idx)
@@ -60,8 +74,8 @@ class WebsiteTasks(TaskSet):
                     self.token = res['token']
                     print('User login: ', res, flush=True)
                     break
-                except:
-                    print('User Login Error', flush=True)
+                except Exception as e:
+                    print('User Login Error', e, flush=True)
                     pass
         else:
             while 1:
@@ -72,8 +86,8 @@ class WebsiteTasks(TaskSet):
                     print('Store login: ', res)
                     self.token = res['token']
                     break
-                except:
-                    print('Store Login Error', flush=True)
+                except Exception as e:
+                    print('Store Login Error', e, flush=True)
                     pass
             while 1:
                 try: 
@@ -83,8 +97,8 @@ class WebsiteTasks(TaskSet):
                     print('res: ', res, flush=True)
                     self.store_store_id[self.idx] = res['qrcode']
                     break
-                except:
-                    print('Get Qrcode Error', flush=True)
+                except Exception as e:
+                    print('Get Qrcode Error', e, flush=True)
                     pass
 
     @task(1)
