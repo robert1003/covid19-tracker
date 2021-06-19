@@ -10,6 +10,3 @@
 [submodule "deployment"]
 	path = deployment
 	url = https://github.com/Rhodanthe1116/covid-tracker-infra
-[submodule "infra"]
-	path = infra
-	url = git@github.com:Rhodanthe1116/covid-tracker-infra.git
